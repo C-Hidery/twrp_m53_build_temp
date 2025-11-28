@@ -76,26 +76,8 @@ jobs:
           exit 1
         fi
 
-    - name: Create flashable zip
-      run: |
-        cd twrp/out/target/product/$DEVICE_CODENAME
-        # 创建基本的刷机包结构
-        mkdir -p META-INF/com/google/android
-        cat > META-INF/com/google/android/updater-script << 'EOF'
-ui_print("Flashing TWRP Recovery...");
-show_progress(0.500000, 0);
-package_extract_file("recovery.img", "/dev/block/bootdevice/by-name/recovery");
-show_progress(0.100000, 0);
-ui_print("Done!");
-EOF
-        
-        # 创建 update-binary
-        cp ../../../../build/tools/releasetools/update-binary META-INF/com/google/android/
-        
-        # 打包成 zip
-        zip -r TWRP-${DEVICE_CODENAME}-$(date +%Y%m%d)-UNOFFICIAL.zip recovery.img META-INF/
-        echo "刷机包创建完成"
-
+    
+    
     - name: Upload recovery image
       uses: actions/upload-artifact@v4
       with:
