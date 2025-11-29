@@ -21,9 +21,10 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: device_tree
-        
+    
     - name: Initialize TWRP repository
       run: |
+        sudo apt install repo
         mkdir -p twrp
         cd twrp
         repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b $MANIFEST_BRANCH --depth=1
@@ -85,12 +86,7 @@ jobs:
         path: twrp/out/target/product/${{ env.DEVICE_CODENAME }}/recovery.img
         retention-days: 7
 
-    - name: Upload flashable zip
-      uses: actions/upload-artifact@v4
-      with:
-        name: TWRP-flashable-zip
-        path: twrp/out/target/product/${{ env.DEVICE_CODENAME }}/TWRP-*-UNOFFICIAL.zip
-        retention-days: 7
+    
 
     - name: Upload build logs (on failure)
       if: failure()
